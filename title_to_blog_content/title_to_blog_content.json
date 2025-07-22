@@ -1,0 +1,627 @@
+{
+  "name": "Title to Blog Content id:1947377009754348821",
+  "nodes": [
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('ENV VARS').item.json.googleSheetId }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "={{ $('ENV VARS').item.json.googleSheetName }}",
+          "mode": "name"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Content"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        1088,
+        128
+      ],
+      "id": "18bb79bb-3447-45a5-aa03-4e506ae0b176",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "",
+          "name": ""
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "{\n  \"googleSheetId\": \"1LR64dxxIA8NL2_lm3YL6IUh_r2oBUuzt9q3K8XX-izM\",\n  \"googleSheetName\": \"Sheet1\"\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        896,
+        128
+      ],
+      "id": "3cfc85fd-4bbd-4d7f-9b33-a21d346ea2aa",
+      "name": "ENV VARS"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('ENV VARS').first().json.googleSheetId }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "={{ $('ENV VARS').first().json.googleSheetName }}",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {
+            "row_number": 0
+          },
+          "matchingColumns": [
+            "row_number"
+          ],
+          "schema": [
+            {
+              "id": "Blog Title",
+              "displayName": "Blog Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Content",
+              "displayName": "Content",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Image URL",
+              "displayName": "Image URL",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        1088,
+        896
+      ],
+      "id": "17e2416d-2fae-4416-92ad-357a431f8e45",
+      "name": "Update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "",
+          "name": ""
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        704,
+        432
+      ],
+      "id": "86e9396f-a264-4c42-82bf-16a1670cd651",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "\n{\n\"row_number\": 2,\n\"Blog Title\": \"a_string\",\n\"Content\": \"a_string\",\n\"Image URL\": \"a_string\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        1088,
+        704
+      ],
+      "id": "723f98c6-ddec-463a-b791-22c00e0ba06c",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "claude-sonnet-4-20250514",
+          "cachedResultName": "Claude 4 Sonnet"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.3,
+      "position": [
+        896,
+        704
+      ],
+      "id": "408c2082-abff-49b6-905f-3dea08dc9b62",
+      "name": "Anthropic Chat Model",
+      "credentials": {
+        "anthropicApi": {
+          "id": "",
+          "name": ""
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "chatgpt-4o-latest",
+          "mode": "list",
+          "cachedResultName": "chatgpt-4o-latest"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        1296,
+        464
+      ],
+      "id": "b91fa8fe-231c-4dfc-b26b-146256f68bac",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "",
+          "name": ""
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Please fill in the \"Content\" field(s) with a 1 000‑word (or longer) article as specified:\n\n{\n  \"row_number\": {{ $json.row_number }},\n  \"Blog Title\": \"{{ $json[\"Blog Title\"] }}\"\n  \"Content\": \"{{ $json.Content }}\"\n  \"Image URL\": \"{{ $json.Content }}\"\n}\n",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=You are an expert long-form content writer and SEO specialist.\n\nWhen I provide a JSON array, process each object as a content creation work order. Each object contains:\n- \"row_number\" (preserve exactly as provided)\n- \"Blog Title\" (the article headline to write about)  \n- \"Content\" (currently empty - replace with your article)\n\nFor each object, generate a completely original 1,000+ word article that matches the \"Blog Title\". \n\nArticle Requirements:\n- Start with an H1 heading using the exact title\n- Include clear H2/H3 subheadings for structure\n- Write in engaging, conversational English\n- Use short paragraphs, bullet points, and examples\n- Include a strong conclusion\n- Incorporate natural keyword variations (no keyword stuffing)\n- No external citations or references needed\n- Don't mention AI authorship\n\nOutput Format:\nReturn the same JSON array structure with only the \"Content\" fields filled in. Preserve all other properties and their original order. Format article text with \\n for line breaks.\n\nExample output structure:\n[\n  {\n    \"row_number\": {{ $json.row_number }},\n    \"Blog Title\": \"{{ $json[\"Blog Title\"] }}\", \n    \"Content\": \"# Article Title\\n\\nYour full article content here...\"\n    \"Image URL\": \"\"\n  }\n]\n\nProvide only the completed JSON array as your response."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.1,
+      "position": [
+        896,
+        528
+      ],
+      "id": "24f83f82-709c-48f8-910b-541d67ee6084",
+      "name": "Create Content",
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.output.Content }}",
+        "options": {
+          "systemMessage": "=You are an AI image generator assistant. Your task is to create a detailed and vivid description for generating an image that visually represents the main themes, mood, and key elements of the provided blog post content. Focus on capturing the essence of the blog post in a way that can be translated into an engaging and relevant image.\n\nWhen creating the description, consider:\n\nThe overall topic and purpose of the blog post\n\nImportant objects, characters, or scenes mentioned\n\nThe tone and atmosphere (e.g., professional, casual, futuristic, natural)\n\nAny specific colors or styles implied or appropriate for the content\n\nOutput the description in a concise but descriptive manner suitable for input into an AI image generation model.\n\nThe output should not exceed 1,000 characters."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.1,
+      "position": [
+        1296,
+        288
+      ],
+      "id": "d5033137-23d7-4774-b84b-5ae6e0cee1a6",
+      "name": "Create Image Prompt"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.openai.com/v1/images/generations",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "openAiApi",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "prompt",
+              "value": "={{ $json.output }}"
+            },
+            {
+              "name": "size",
+              "value": "512x512"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1664,
+        288
+      ],
+      "id": "956a4f16-6928-4a4f-87ad-4981909c0485",
+      "name": "Create Image",
+      "credentials": {
+        "openAiApi": {
+          "id": "",
+          "name": ""
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1856,
+        672
+      ],
+      "id": "051def03-480b-4ca2-bde2-c533ee4a36dc",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "title": "={{ $json[\"Blog Title\"] }}",
+        "additionalFields": {
+          "content": "={{ $json.Content }}",
+          "status": "draft"
+        }
+      },
+      "type": "n8n-nodes-base.wordpress",
+      "typeVersion": 1,
+      "position": [
+        1296,
+        896
+      ],
+      "id": "8824083f-dff8-4509-a622-eab3425f92a9",
+      "name": "Create WP Draft",
+      "disabled": true
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        896,
+        352
+      ],
+      "id": "0799be1b-646e-4361-b59d-fddd253a5c0e",
+      "name": "END"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        704,
+        128
+      ],
+      "id": "9b4f0226-a86d-482c-af5f-6fa5b685b42b",
+      "name": "START"
+    },
+    {
+      "parameters": {
+        "content": "# Title to Blog Content v0.1.1\n---\n## TL;DR:\n### This workflow will read the title out of a Google Sheet column, produce a 1,000+ word article and image and POST a draft to Wordpress.",
+        "height": 192,
+        "width": 480,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1296,
+        48
+      ],
+      "id": "67631161-7a64-4785-a479-0d9afe1585cf",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Input data assumed to be in items as two separate entries:\n// items[0] contains the data with image URL\n// items[1] contains the output with blog content\n\nconst dataItem = items.find(item => item.json.data !== undefined);\nconst outputItem = items.find(item => item.json.output !== undefined);\n\nif (!dataItem || !outputItem) {\n  throw new Error(\"Required input data missing\");\n}\n\nconst imageUrl = dataItem.json.data[0]?.url || \"\";\nconst output = outputItem.json.output;\n\nconst combined = {\n  row_number: output.row_number || 0,\n  \"Blog Title\": output[\"Blog Title\"] || \"\",\n  \"Content\": output.Content || \"\",\n  \"Image URL\": imageUrl,\n};\n\nreturn [{ json: combined }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        896,
+        896
+      ],
+      "id": "67603a1a-25dc-4011-9b07-acc8ecd42ae0",
+      "name": "Combine Blog JSON"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "5419c1ba-f56e-406a-9c19-8cc90d624f55",
+                    "leftValue": "={{ $json.error }}",
+                    "rightValue": "=Model output doesn't fit required format",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        1296,
+        656
+      ],
+      "id": "9427b01f-d5b1-4381-a29a-a0536d6eb8cc",
+      "name": "AI Agent Error-Handling Goes Here"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1664,
+        496
+      ],
+      "id": "07e1e1db-fa61-4f3e-a96a-383d73735a79",
+      "name": "API Error-Handling Goes Here"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "ENV VARS": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "END",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Create Content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Create Content",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Anthropic Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Create Content",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Create WP Draft",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Create Image Prompt",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Content": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          },
+          {
+            "node": "Create Image Prompt",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "AI Agent Error-Handling Goes Here",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Image Prompt": {
+      "main": [
+        [
+          {
+            "node": "Create Image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Image": {
+      "main": [
+        [
+          {
+            "node": "API Error-Handling Goes Here",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Combine Blog JSON",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create WP Draft": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "START": {
+      "main": [
+        [
+          {
+            "node": "ENV VARS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Combine Blog JSON": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent Error-Handling Goes Here": {
+      "main": [
+        [
+          {
+            "node": "Create Content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "API Error-Handling Goes Here": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "ce581d30-b5e0-4d5f-8889-12c1850664f7",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": ""
+  },
+  "id": "",
+  "tags": []
+}
